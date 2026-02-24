@@ -1,0 +1,25 @@
+[scripts]
+dev = "uvicorn main:app --reload"
+migrate:generate = "alembic revision --autogenerate -m"
+migrate:upgrade = "alembic upgrade head"
+migrate:downgrade = "alembic downgrade -1"
+
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+pydantic = "*"
+sqlalchemy = "*"
+databases = {extras = ["postgresql"], version = "*"}
+alembic = "*"
+psycopg2 = "*"
+
+[dev-packages]
+psycopg2-binary = "*"
+
+[requires]
+python_version = "3.13"

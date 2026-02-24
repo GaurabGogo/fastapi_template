@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  # app:
+  #   build: .
+  #   container_name: fastapi_app
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - .:/app
+  #   restart: always
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - fastapi_network
+  #   environment:
+  #     - DATABASE_URL=postgresql://postgres:password@postgres:5432/travel_db
+
+  postgres:
+    image: postgres:16
+    container_name: fastapi_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: travel_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fastapi_network
+
+volumes:
+  postgres_data:
+
+networks:
+  fastapi_network:
