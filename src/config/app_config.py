@@ -8,10 +8,6 @@ class AppConfig(BaseSettings):
     app_name: str
     app_env: str
     database_url: str
-    secret_key: str
-    algorithm: str
-    access_token_expire_minutes: int = 5
-    refresh_token_expire_minutes: int = 50
     log_level: int = logging.DEBUG
     allowed_origins: list[str] = ["http://localhost:3001"]
 
