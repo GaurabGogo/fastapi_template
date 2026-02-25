@@ -1,7 +1,6 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.responses import send_response
@@ -10,7 +9,7 @@ from src.core.cookies import set_auth_cookie, clear_auth_cookie
 from src.database.db import get_db
 from src.users.repositories.user_repo import UserRepository
 from src.users.schemas.user_schema import UserCreate, UserRead
-from src.users.schemas.auth_schema import Token
+from src.users.schemas.auth_schema import Token, UserLogin
 from src.users.services.user_service import UserService
 
 router = APIRouter(prefix="/user", tags=["Users"])
@@ -89,10 +88,10 @@ async def register_user(
 
 @router.post("/login")
 async def login_user(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    login_data: UserLogin,
     service: UserServiceDep
 ):
-    user = await service.authenticate_user(form_data.username, form_data.password)
+    user = await service.authenticate_user(login_data.email, login_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
