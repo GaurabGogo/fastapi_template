@@ -1,15 +1,15 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
 class UserBase(BaseModel):
     name: str = Field(..., max_length=50, min_length=5)
-    age: int | None = Field(None, ge=18, le=99)
+    email: EmailStr
 
 
 class UserCreate(UserBase):
-    pass
+    password: str
 
 
 class UserRead(UserBase):

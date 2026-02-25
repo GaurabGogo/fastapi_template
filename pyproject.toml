@@ -7,13 +7,16 @@ requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.109.0",
     "uvicorn[standard]>=0.27.0",
-    "pydantic>=2.6.0",
+    "pydantic[email]>=2.6.0",
     "pydantic-settings>=2.1.0",
     "sqlalchemy[asyncio]>=2.0.25",
     "asyncpg>=0.29.0",
     "alembic>=1.13.1",
     "greenlet>=3.0.3",
     "slowapi>=0.1.9",
+    "pyjwt>=2.11.0",
+    "python-multipart>=0.0.22",
+    "bcrypt>=5.0.0",
 ]
 
 [project.scripts]

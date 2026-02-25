@@ -12,14 +12,19 @@ from src.sessions.schemas.session_schema import (
     SessionRead,
 )
 from src.sessions.services.session_service import SessionService
+from src.core.security import is_authenticated
+from src.users.models.user import User
 
 router = APIRouter(prefix="/sessions", tags=["Sessions"])
 
 
 @router.post("/start", status_code=status.HTTP_201_CREATED)
-async def start_session(db: Annotated[AsyncSession, Depends(get_db)]):
+async def start_session(
+    current_user: Annotated[User, Depends(is_authenticated)],
+    db: Annotated[AsyncSession, Depends(get_db)]
+):
     service = SessionService(db)
-    session = await service.start_session()
+    session = await service.start_session(current_user.id)
     return send_response(
         message="Session started successfully",
         data=SessionRead.model_validate(session),
@@ -31,6 +36,7 @@ async def start_session(db: Annotated[AsyncSession, Depends(get_db)]):
 async def add_location(
     session_id: UUID,
     location_data: LocationCreate,
+    current_user: Annotated[User, Depends(is_authenticated)],
     db: Annotated[AsyncSession, Depends(get_db)]
 ):
     service = SessionService(db)
@@ -45,6 +51,7 @@ async def add_location(
 @router.post("/{session_id}/end")
 async def end_session(
     session_id: UUID,
+    current_user: Annotated[User, Depends(is_authenticated)],
     db: Annotated[AsyncSession, Depends(get_db)]
 ):
     service = SessionService(db)
@@ -58,6 +65,7 @@ async def end_session(
 @router.get("/{session_id}")
 async def get_session(
     session_id: UUID,
+    current_user: Annotated[User, Depends(is_authenticated)],
     db: Annotated[AsyncSession, Depends(get_db)]
 ):
     service = SessionService(db)

@@ -223,7 +223,8 @@ Install only production dependencies in container builds:
 - **Developer UX**: Custom `uv` scripts for common tasks
 - **Production Ready**: Rate limiting, structured logging, and global error handling
 - **Advanced Querying**: Standardized pagination, sorting, and name search
-- **Session Tracking**: Built-in support for travel sessions with strict location geometry validation
+- **JWT Authentication**: Fully secure OAuth2 registration and login using modern native `bcrypt` with HTTP-only cookies.
+- **Session Tracking**: Built-in support for travel sessions with strict location geometry validation, deeply linked to authenticated user profiles.
 
 ---
 

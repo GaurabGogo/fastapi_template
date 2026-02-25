@@ -1,12 +1,16 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.responses import send_response
+from src.core.security import create_access_token
+from src.core.cookies import set_auth_cookie, clear_auth_cookie
 from src.database.db import get_db
 from src.users.repositories.user_repo import UserRepository
 from src.users.schemas.user_schema import UserCreate, UserRead
+from src.users.schemas.auth_schema import Token
 from src.users.services.user_service import UserService
 
 router = APIRouter(prefix="/user", tags=["Users"])
@@ -63,19 +67,56 @@ async def get_user(
     data = UserRead.model_validate(user).model_dump()
     return send_response(message="Get a User", data=data)
 
-@router.post("/")
-async def create_user(
+@router.post("/register")
+async def register_user(
     user_data: UserCreate, 
     service: UserServiceDep
 ):
-    user = await service.create_user(user_data)
-    data = UserRead.model_validate(user).model_dump()
+    try:
+        user = await service.create_user(user_data)
+        data = UserRead.model_validate(user).model_dump()
+        
+        return send_response(
+            message="User registered successfully", 
+            data=data, 
+            status_code=status.HTTP_201_CREATED
+        )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+
+@router.post("/login")
+async def login_user(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    service: UserServiceDep
+):
+    user = await service.authenticate_user(form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token = create_access_token(data={"sub": user.email})
     
-    return send_response(
-        message="Created a User", 
-        data=data, 
-        status_code=status.HTTP_201_CREATED
+    data = UserRead.model_validate(user).model_dump()
+    data["access_token"] = access_token
+    
+    response = send_response(
+        message="Login successful",
+        data=data
     )
+    
+    set_auth_cookie(response, access_token)
+    return response
+
+@router.post("/logout")
+async def logout_user():
+    response = send_response(message="Logout successful")
+    clear_auth_cookie(response)
+    return response
 
 @router.delete("/{user_id}")
 async def delete_user(

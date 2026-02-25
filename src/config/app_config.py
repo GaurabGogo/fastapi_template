@@ -10,6 +10,9 @@ class AppConfig(BaseSettings):
     app_host: str = "0.0.0.0"
     app_port: int = 8000
     database_url: str
+    secret_key: str = "super_secret_jwt_key_please_change_in_production"
+    algorithm: str = "HS256"
+    access_token_expire_minutes: int = 1440 # 24 hours
     log_level: int = logging.DEBUG
     allowed_origins: list[str] = ["http://localhost:3001"]
     allowed_methods: list[str] = ["*"]

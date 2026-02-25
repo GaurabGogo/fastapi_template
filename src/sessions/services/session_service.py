@@ -11,8 +11,8 @@ class SessionService:
     def __init__(self, db: AsyncSession):
         self.repo = SessionRepository(db)
 
-    async def start_session(self):
-        session = await self.repo.create_session()
+    async def start_session(self, user_id: int):
+        session = await self.repo.create_session(user_id)
         return await self.repo.get_session(session.id)
 
     async def add_location(self, session_id: UUID, location_data: LocationCreate):

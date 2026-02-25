@@ -68,8 +68,17 @@ class UserRepository:
         result = await self.db.execute(stmt)
         return result.scalars().first()
 
-    async def create(self, user_data: UserCreate) -> User:
-        user = User(name=user_data.name, age=user_data.age)
+    async def get_by_email(self, email: str) -> User | None:
+        stmt = select(User).where(User.email == email)
+        result = await self.db.execute(stmt)
+        return result.scalars().first()
+
+    async def create(self, user_data: UserCreate, hashed_password: str) -> User:
+        user = User(
+            name=user_data.name, 
+            email=user_data.email, 
+            hashed_password=hashed_password
+        )
         self.db.add(user)
         await self.db.commit()
         await self.db.refresh(user)

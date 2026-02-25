@@ -21,11 +21,10 @@ def send_response(
     errors: Any = None,
     success: bool = True,
     status_code: int = 200,
-    cookies: dict[str, str] | None = None,
     **kwargs
 ) -> JSONResponse:
     """
-    Standardizes API response format and handles cookies.
+    Standardizes API response format.
     """
     response_data = ApiResponse(
         success=success,
@@ -45,8 +44,5 @@ def send_response(
         **kwargs
     )
 
-    if cookies:
-        for key, value in cookies.items():
-            response.set_cookie(key=key, value=value, httponly=True)
-
     return response
+
