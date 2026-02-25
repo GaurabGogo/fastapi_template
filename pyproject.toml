@@ -1,0 +1,53 @@
+[project]
+name = "travel_app"
+version = "0.1.0"
+description = "FastAPI Travel App with Clean Architecture"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.1.0",
+    "sqlalchemy[asyncio]>=2.0.25",
+    "asyncpg>=0.29.0",
+    "alembic>=1.13.1",
+    "greenlet>=3.0.3",
+    "slowapi>=0.1.9",
+]
+
+[project.scripts]
+dev = "src.core.scripts:run_dev"
+migrate-generate = "src.core.scripts:migrate_generate"
+migrate-upgrade = "src.core.scripts:migrate_upgrade"
+migrate-downgrade = "src.core.scripts:migrate_downgrade"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.2",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.uv]
+package = true
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "C4", "SIM"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
