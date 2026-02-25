@@ -1,5 +1,0 @@
-[console_scripts]
-dev = src.core.scripts:run_dev
-migrate-downgrade = src.core.scripts:migrate_downgrade
-migrate-generate = src.core.scripts:migrate_generate
-migrate-upgrade = src.core.scripts:migrate_upgrade
