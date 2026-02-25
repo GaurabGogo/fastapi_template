@@ -8,6 +8,7 @@ from src.core.error_handlers import register_error_handlers
 from src.core.logger import register_logging
 from src.core.middleware import register_middleware
 from src.core.rate_limit import register_rate_limiting
+from src.sessions.controllers import session_controller
 from src.users.controllers import user_controller
 
 logger = logging.getLogger(__name__)
@@ -38,6 +39,7 @@ register_error_handlers(app)
 
 # Include all routes
 app.include_router(user_controller.router, prefix="/api")
+app.include_router(session_controller.router, prefix="/api")
 
 @app.get("/")
 async def root():
