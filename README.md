@@ -182,6 +182,7 @@ travel_app/
 │   ├── app.py           # Application entry point & registration
 │   ├── core/            # Global utilities (responses, errors, logging)
 │   ├── database/        # Async DB configuration
+│   ├── sessions/        # Session Tracking Domain (Models, Schemas, Repos, Controllers)
 │   └── users/           # User Domain (Model, Schema, Repo, Service, Controller)
 ├── alembic/             # Database migrations
 ├── pyproject.toml       # Modern uv & ruff configuration
@@ -222,6 +223,7 @@ Install only production dependencies in container builds:
 - **Developer UX**: Custom `uv` scripts for common tasks
 - **Production Ready**: Rate limiting, structured logging, and global error handling
 - **Advanced Querying**: Standardized pagination, sorting, and name search
+- **Session Tracking**: Built-in support for travel sessions with strict location geometry validation
 
 ---
 
